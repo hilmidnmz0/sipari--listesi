@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sipariş Listesi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #siparisFormu {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        #siparisInput {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+        }
+        #ekleButon {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #siparisList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #siparisList li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .siparisSira {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .siparisIcerik {
+            flex-grow: 1;
+        }
+        .silButon {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sipariş Listesi</h1>
+    <div id="siparisFormu">
+        <input type="text" id="siparisInput" placeholder="Sipariş giriniz...">
+        <button id="ekleButon">Ekle</button>
+    </div>
+    <ul id="siparisList"></ul>
+
+    <script>
+        let siparisSayisi = 0;
+
+        document.getElementById('ekleButon').addEventListener('click', siparisEkle);
+        document.getElementById('siparisInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                siparisEkle();
+            }
+        });
+
+        function siparisEkle() {
+            var siparisInput = document.getElementById('siparisInput');
+            var siparisList = document.getElementById('siparisList');
+            
+            if (siparisInput.value !== '') {
+                siparisSayisi++;
+                var li = document.createElement('li');
+                
+                var siraSpan = document.createElement('span');
+                siraSpan.className = 'siparisSira';
+                siraSpan.textContent = siparisSayisi;
+                
+                var siparisSpan = document.createElement('span');
+                siparisSpan.className = 'siparisIcerik';
+                siparisSpan.textContent = siparisInput.value;
+                
+                var silButon = document.createElement('button');
+                silButon.className = 'silButon';
+                silButon.textContent = 'Sil';
+                silButon.onclick = function(e) {
+                    e.stopPropagation();
+                    li.remove();
+                    yenidenNumaralandir();
+                };
+                
+                li.appendChild(siraSpan);
+                li.appendChild(siparisSpan);
+                li.appendChild(silButon);
+                
+                siparisList.appendChild(li);
+                siparisInput.value = '';
+            }
+        }
+
+        function yenidenNumaralandir() {
+            var siparisOgeleri = document.querySelectorAll('#siparisList li');
+            siparisSayisi = siparisOgeleri.length;
+            siparisOgeleri.forEach((oge, index) => {
+                oge.querySelector('.siparisSira').textContent = index + 1;
+            });
+        }
+    </script>
+</body>
+</html>
